@@ -95,5 +95,4 @@ Se han realizado las siguientes implementaciones y correcciones sobre la base or
 ### 2. Nuevas Funcionalidades
 - **Búsqueda de Tareas**: Se implementó una barra de búsqueda (`SearchBar`) que permite filtrar tareas en tiempo real por título, descripción o ubicación. La lógica de filtrado se integró directamente en el hook `useTasks`.
 
-### video de la app funcionando en youtube
-https://www.youtube.com/watch?v=wuCaooNw-3Q
+### video de las preguntas

@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/hooks/use-auth';
 
 export default function LoginScreen() {
-  const { signIn, loading } = useAuth();
+  const { signIn, loading, user } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -106,6 +106,16 @@ export default function LoginScreen() {
                 {submitting || loading ? 'Ingresando…' : 'Ingresar'}
               </Text>
             </Pressable>
+
+            {/* 🔎 DEMOSTRACIÓN DE ESTADO (PRUEBA) */}
+            <View className="mt-4 items-center">
+              <Text className="text-xs text-slate-400">
+                Loading: {loading ? 'true' : 'false'}
+              </Text>
+              <Text className="text-xs text-slate-400">
+                User: {user ? user.email : 'null'}
+              </Text>
+            </View>
           </View>
         </View>
       </KeyboardAvoidingView>

@@ -1,100 +1,153 @@
 # Taskly · Lista de tareas con fotos y ubicación
 
-Aplicación móvil basada en Expo Router (React Native + TypeScript) pensada para evidenciar la evaluación de Unidad 1. Cada tarea pertenece a un usuario autenticado, exige una foto tomada con la cámara y almacena el nombre del lugar donde fue creada.
+Aplicación móvil desarrollada con **Expo Router (React Native + TypeScript)**, creada como evidencia de la **Evaluación de la Unidad 1**. El proyecto demuestra el uso de **estado en React**, **hooks personalizados**, **contexto global**, y **APIs nativas** como cámara y ubicación.
+
+Cada tarea pertenece a un usuario autenticado, requiere una foto tomada con la cámara del dispositivo y guarda el nombre del lugar donde fue creada.
+
+---
+
+## Objetivo del proyecto
+
+El objetivo principal de Taskly es demostrar:
+
+* El manejo de **estado local y global en React** usando `useState`.
+* El uso de **hooks personalizados** para separar lógica y presentación.
+* La implementación de **autenticación** con persistencia local.
+* El consumo de **APIs nativas** (cámara, ubicación y sistema de archivos).
+* Una arquitectura ordenada y mantenible.
+
+---
 
 ## Requisitos
 
-- Node.js 18 o superior
-- npm 9+ (incluido con Node 18)
-- Dispositivo con Expo Go, simulador iOS o emulador Android
-- Permisos de cámara y ubicación para probar las funciones multimedia
+* Node.js 18 o superior
+* npm 9+ (incluido con Node 18)
+* Dispositivo con Expo Go, simulador iOS o emulador Android
+* Permisos de cámara y ubicación habilitados
+
+---
 
 ## Puesta en marcha
 
 ```bash
 npm install          # instala dependencias
-npm run lint         # valida estilos y tipos con eslint-config-expo
-npx tsc --noEmit     # (opcional) verificación estricta de TypeScript
-npx expo start       # levanta Metro y expone el proyecto
+npm run lint         # valida estilos y tipos
+npx tsc --noEmit     # verificación de TypeScript (opcional)
+npx expo start       # inicia el proyecto
 ```
 
-Cuando Metro se inicie, escanea el QR con Expo Go o presiona `w` para abrir la versión web. Mantén el teléfono y el computador en la misma red local.
-
-## Funcionalidades clave
-
-### Autenticación y sesiones locales
-- Registro e inicio de sesión totalmente offline con normalización de correo.
-- Persistencia de los usuarios y de la sesión activa en AsyncStorage.
-- Contexto global (`useAuth`) que hidrata el estado antes de renderizar las pantallas protegidas.
-
-### Tareas enriquecidas
-- Cada tarea guarda título, descripción, foto obligatoria, nombre del lugar y estado.
-- Captura de fotos con `expo-image-picker`, fallback a librería en Web y reemplazo seguro de imágenes anteriores.
-- Detección automática del lugar con `expo-location` + `reverseGeocode`, editable manualmente.
-- Las imágenes se copian al sandbox del usuario mediante `expo-file-system` y se limpian al eliminar tareas.
-
-### Productividad y métricas
-- Filtros con contadores (todas, pendientes, completadas) y ordenamiento automático.
-- Banner animado con porcentaje completado y CTA hacia el modal de estadísticas.
-- Modal `/modal` con cards informativas, barra de progreso y acción masiva para limpiar completadas.
-
-### Experiencia de usuario
-- Animaciones con Reanimated (FadeInDown, FadeOutRight, SlideInDown, springs).
-- Feedback háptico en iOS al completar/guardar tareas.
-- Contadores de caracteres, validaciones amigables y mensajes contextuales.
-- Indicador visual cuando la persistencia está en curso (icono 💾).
-
-## Permisos
-
-- **Cámara**: requerida para capturar la foto de cada tarea. La app muestra un mensaje de error si el permiso se rechaza.
-- **Ubicación**: usada para obtener un nombre sugerido del lugar; puedes editarlo manualmente si no deseas otorgar el permiso.
-
-## Scripts útiles
-
-- `npm run start` · inicia Metro con Expo Router.
-- `npm run lint` · ejecuta `expo lint` (ESLint + TypeScript).
-- `npm run android | ios | web` · abre Expo Go en la plataforma indicada.
-- `npm run reset-project` · limpia cachés y reinstala dependencias (script auxiliar).
-
-## Estructura relevante
-
-- `app/_layout.tsx` · monta proveedores globales (Auth + Tasks) y navegación.
-- `app/login.tsx` · flujo de registro/inicio completamente tipado.
-- `app/(tabs)/index.tsx` · pantalla principal (formulario, filtros, lista, banner y acciones masivas).
-- `app/modal.tsx` · resumen de estadísticas y limpieza de tareas completadas.
-- `hooks/use-auth.ts` · manejo de usuarios locales, sesión y sign-in/sign-up.
-- `hooks/use-tasks.ts` · CRUD por usuario + persistencia y serialización robusta.
-- `components/tasks/*` · UI reutilizable (formulario, filtros, lista, stats banner).
-- `utils/task-media.ts` · helpers para copiar/eliminar fotos en el sistema de archivos.
-
-## Próximas ideas
-
-- Sincronización remota y copia de seguridad en la nube.
-- Etiquetas/categorías y búsqueda avanzada.
-- Recordatorios con notificaciones push.
-- Compartir listas entre usuarios.
-
-## Recursos útiles
-
-- [Expo Docs](https://docs.expo.dev/)
-- [NativeWind](https://www.nativewind.dev/)
-- [Async Storage](https://react-native-async-storage.github.io/async-storage/docs/install/)
+Al iniciar Metro, escanea el código QR con **Expo Go** o presiona `w` para abrir la versión web.
 
 ---
 
-Si necesitas restablecer el estado del proyecto, ejecuta `npm run reset-project` y luego `npm install` para reinstalar dependencias limpias.
+## Funcionalidades clave
 
-## Informe de Cambios y Mejoras (22 Nov 2025)
+### 1. Autenticación y manejo de estado global
 
-Se han realizado las siguientes implementaciones y correcciones sobre la base original del proyecto
+* Registro e inicio de sesión de usuarios.
+* Persistencia de sesión con **AsyncStorage**.
+* Uso de **Context + hook `useAuth`** para manejar el estado global de autenticación.
 
-### 1. Refactorización y Arquitectura
-- **Hook `useTaskForm`**: Se extrajo toda la lógica de manejo del formulario (estado, validaciones, cámara, ubicación) desde `index.tsx` hacia un custom hook dedicado (`hooks/use-task-form.ts`). Esto reduce la complejidad del componente visual y facilita el mantenimiento.
-- **Scroll Unificado**: Se optimizó la pantalla principal integrando el formulario y los filtros dentro de `ListHeaderComponent` del `FlatList`, permitiendo que toda la interfaz sea desplazable de manera fluida en pantallas pequeñas.
+Estados principales:
 
-### 2. Nuevas Funcionalidades
-- **Búsqueda de Tareas**: Se implementó una barra de búsqueda (`SearchBar`) que permite filtrar tareas en tiempo real por título, descripción o ubicación. La lógica de filtrado se integró directamente en el hook `useTasks`.
+* `user`: usuario autenticado
+* `loading`: indica si la sesión se está cargando
 
-### video funcionalidad programa
-https://www.youtube.com/shorts/dkvcrW-PZy8 
-### video de las preguntas
+Cada vez que estos estados cambian, **React vuelve a renderizar la interfaz automáticamente**, sin recargar la aplicación.
+
+### 2. Demostración práctica del estado en React
+
+En la pantalla de login se utilizan múltiples estados con `useState`:
+
+* `email` y `password`: controlan los inputs del formulario
+* `error`: maneja mensajes de error
+* `submitting`: controla el estado del botón
+* `loading` y `user`: provienen del contexto global
+
+Como prueba visible, se muestran los valores de `loading` y `user` en pantalla, demostrando que al cambiar el estado, la vista se actualiza automáticamente.
+
+---
+
+### 3. Gestión de tareas
+
+* CRUD completo de tareas por usuario.
+
+* Cada tarea incluye:
+
+  * Título
+  * Descripción
+  * Foto obligatoria
+  * Ubicación (nombre del lugar)
+  * Estado (pendiente / completada)
+
+* Persistencia local por usuario con AsyncStorage.
+
+---
+
+### 4. Uso de APIs nativas
+
+* **Cámara**: captura de fotos con `expo-image-picker`.
+* **Ubicación**: obtención automática del lugar con `expo-location` y `reverseGeocode`.
+* **Sistema de archivos**: manejo seguro de imágenes con `expo-file-system`.
+
+Estas funcionalidades demuestran que la aplicación es **nativa**, ya que interactúa directamente con capacidades del dispositivo.
+
+---
+
+### 5. Experiencia de usuario
+
+* Animaciones con Reanimated.
+* Feedback visual e interactivo.
+* Validaciones de formularios en tiempo real.
+* Indicadores de carga y persistencia.
+
+---
+
+## Permisos
+
+* **Cámara**: obligatoria para crear tareas.
+* **Ubicación**: usada para sugerir el nombre del lugar (editable).
+
+---
+
+## Scripts disponibles
+
+* `npm run start` · inicia el proyecto
+* `npm run lint` · análisis de código
+* `npm run android | ios | web` · abre la app en la plataforma indicada
+* `npm run reset-project` · limpia cachés y dependencias
+
+---
+
+## Estructura del proyecto
+
+* `app/_layout.tsx` · proveedores globales y navegación
+* `app/login.tsx` · flujo de autenticación
+* `app/(tabs)/index.tsx` · pantalla principal de tareas
+* `app/modal.tsx` · estadísticas y acciones masivas
+* `hooks/use-auth.ts` · autenticación y estado global
+* `hooks/use-tasks.ts` · gestión de tareas
+* `hooks/use-task-form.ts` · lógica del formulario
+* `components/*` · componentes reutilizables
+* `utils/*` · utilidades y helpers
+
+---
+
+## Videos demostrativos
+
+* **Video funcionamiento general**:
+  https://www.youtube.com/shorts/dkvcrW-PZy8
+
+
+* **Video respuestas conceptuales**:
+
+
+---
+
+## Conclusión
+
+Taskly demuestra el uso correcto del **estado en React**, la separación de responsabilidades mediante hooks personalizados y el consumo de APIs nativas. El proyecto cumple con los objetivos de la Unidad 1 y evidencia una aplicación móvil funcional, ordenada y escalable.
+
+---
+
+Si es necesario restablecer el proyecto, ejecutar `npm run reset-project` y luego `npm install`.
